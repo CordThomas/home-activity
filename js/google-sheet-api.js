@@ -1,4 +1,12 @@
-// The keys are in a separate file
+// Keys and unique tokens are in a separate file, keys.js referenced by the HTML file
+// The API keys are from the Google API.  Read this article on instructions
+// for how to generate these keys https://developers.google.com/sheets/api/quickstart/js
+// The two keys are CLIENT_ID that ends with .apps.googleusercontent.com and
+// API_KEY that is roughtly 40 charaacters long.   Declare these as var API_KEY = '';
+// in js/keys.js.
+// Another set of keys are the IDs of the Google sheets.  I have kept these in this
+// code for now since I feel the data is sufficiently protected given the keys
+// are hidden.
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
@@ -80,11 +88,20 @@ function appendPre(message) {
     pre.appendChild(textContent);
 }
 
+// Clears the PRE<content> tag of content
 function clearPre() {
     var pre = document.getElementById('content');
     pre.innerHTML = '';
 }
 
+/**
+ * A wrapper to processing the events from the
+ * Google sheet.  This first determines the
+ * number of rows in the sheet and then
+ * calls on listRecentEvents along with
+ * the number of records to show.
+ * @param minCount
+ */
 function populateRecentEvents(minCount) {
     lastEventRecord=minCount;
     gapi.client.sheets.spreadsheets.values.get({
@@ -102,9 +119,12 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/* off shoot of the update Activity method which adjusts
-the class of the appropriate room rectangle based on the
-state of the sensors in the room.
+/**
+ * Offshoot of the update Activity method which adjusts
+ * the class of the appropriate room rectangle based on the
+ * state of the sensors in the room.  This method
+ * changes the class of the sonos SVG to indicate when
+ * the speakers are playing vs not
  */
 function updateSonos (sensorMapID, sensorStyle) {
 
@@ -126,6 +146,16 @@ function updateSonos (sensorMapID, sensorStyle) {
     }
 }
 
+/**
+ * Updates the appropriate room, door or other object's class
+ * with either an active or inactive flag based on the state
+ * of the sensor associated with that object's location/presence.
+ * @param datetime The timestamp of the event
+ * @param sensorID The ID of the sensor (from the sheet) that is mapped to an
+ * SVG object
+ * @param state Whether the sensor is open, closed, active, inactive, etc.
+ * See home-events.js for the mappigns of sensorID and state.
+ */
 function updateActivity(datetime, sensorID, state) {
     var sensorMapID = sensorIDs[sensorID];
     var sensorRoom = document.getElementById(sensorMapID);
@@ -137,6 +167,8 @@ function updateActivity(datetime, sensorID, state) {
         if (sensorIDs[sensorID].includes("door")) {
             sensorStyle = "door-" + sensorStyle;
         } else if (sensorIDs[sensorID].includes("sonos")) {
+            // Need to figure out why udpateSonos loop is not working
+            // Something to do with the asynchronous nature of my code.
             // if (sensorStyle != null) {
             //     updateSonos(sensorMapID, sensorStyle);
             // }
@@ -145,7 +177,6 @@ function updateActivity(datetime, sensorID, state) {
             sensorStyle = "room-" + sensorStyle;
         }
         if (commonUpdate) {
-            // console.log(  "Sensor style " + sensorStyle + " from state " + state);
             sensorRoom.setAttribute('class', sensorStyle);
             sensorRoomWall.setAttribute('class', sensorStyle + '-wall');
         }
@@ -154,6 +185,10 @@ function updateActivity(datetime, sensorID, state) {
     }
 }
 
+/**
+ * Initialize the Sonos SVG object with the 6 arcs
+ * Followed guidance provided here https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
+ */
 function initSonos() {
     var sonos1arc1 = document.getElementById('living-room-sonos-arc-1');
     sonos1arc1.setAttribute("d", describeArc(170, 230, 7, 235, 315));
@@ -169,6 +204,14 @@ function initSonos() {
     sonos1arc6.setAttribute("d", describeArc(170, 230, 13, 45, 135));
 }
 
+/**
+ * The main function of the site for now; this opens the Google sheet,
+ * calculates the row numbers to report on based on the lastEventRecord
+ * and the minCount and retrieves the event timestamp, event sensor,
+ * and event state (open/close, active/inactive)
+ * @param lastEventRecord The last row of the sheet
+ * @param eventCount The number of events to iterate over
+ */
 function listRecentEvents(lastEventRecord, eventCount) {
     clearPre();
     firstEventRecord = lastEventRecord - eventCount + 1;
