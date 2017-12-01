@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 576 949" width="48pc" height="949pt" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata> Produced by OmniGraffle 7.3 
+    <dc:date>2017-11-29 22:43:18 +0000</dc:date>
+  </metadata>
+  <defs/>
+  <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
+    <title>Canvas 1</title>
+    <rect id="" fill="white" width="576" height="949"/>
+    <g>
+      <title>Rooms</title>
+      <rect id="living-room" x="131.0187" y="122.625" width="283.97" height="98.9543" fill="#ffffc0"/>
+      <rect id="living-room-wall" x="131.0187" y="122.625" width="283.97" height="98.9543" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="bedroom-guest-1" x="415.125" y="122.625" width="108.28059" height="98.9543" fill="#ffffc0"/>
+      <rect id="bedroom-guest-1-wall" x="415.125" y="122.625" width="108.28059" height="98.9543" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="hallway" x="415.125" y="221.625" width="36" height="290.375" fill="#ffffc0"/>
+      <rect id="hallway-wall" x="415.125" y="221.625" width="36" height="290.375" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="kitchen" x="131.0187" y="221.625" width="124.3563" height="101.20834" fill="#ffffc0"/>
+      <rect id="kitchen-wall" x="131.0187" y="221.625" width="124.3563" height="101.20834" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="bathroom-guest" x="255.375" y="221.625" width="63" height="101.25" fill="#ffffc0"/>
+      <rect id="bathroom-guest-wall" x="255.375" y="221.625" width="63" height="101.25" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="reading-room" x="318.375" y="221.625" width="96.61369" height="101.25" fill="#ffffc0"/>
+      <rect id="reading-room-wall" x="318.375" y="221.625" width="96.61369" height="101.25" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="solarium" x="309.35206" y="322.875" width="105.63663" height="189.125" fill="#ffffc0"/>
+      <rect id="solarium-wall" x="309.35206" y="322.875" width="105.63663" height="189.125" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="bathroom-main" x="450" y="249.94345" width="73.40559" height="70.875" fill="#ffffc0"/>
+      <rect id="bathroom-main-wall" x="450" y="249.94345" width="73.40559" height="70.875" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="closet-hall" x="450" y="319.5" width="73.40559" height="33.860546" fill="#ffffc0"/>
+      <rect id="closet-hall-wall" x="450" y="319.5" width="73.40559" height="33.860546" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="bedroom-guest-2" x="450" y="353.25" width="73.40559" height="70.875" fill="#ffffc0"/>
+      <rect id="bedroom-guest-2-wall" x="450" y="353.25" width="73.40559" height="70.875" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="closet-master-bedroom" x="450" y="424.125" width="73.40559" height="109.625" fill="#ffffc0"/>
+      <rect id="closet-master-bedroom-wall" x="450" y="424.125" width="73.40559" height="109.625" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="bedroom-master" x="309.35206" y="511.875" width="214.05352" height="143.125" fill="#ffffc0"/>
+      <rect id="bedroom-master-wall" x="309.35206" y="511.875" width="214.05352" height="143.125" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="closet-guest-1" x="450" y="221.5793" width="73.40559" height="28.170703" fill="#ffffc0"/>
+      <rect id="closet-guest-1-wall" x="450" y="221.5793" width="73.40559" height="28.170703" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="garage-laundry" x="138.375" y="543.375" width="73.40559" height="178.75" fill="#ffffc0"/>
+      <rect id="garage-laundry-wall" x="138.375" y="543.375" width="73.40559" height="178.75" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="garage-front" x="41.625" y="543.375" width="96.61369" height="118.125" fill="#ffffc0"/>
+      <rect id="garage-front-wall" x="41.625" y="543.375" width="96.61369" height="118.125" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="garage-rear" x="41.625" y="661.5" width="96.61369" height="60.625" fill="#ffffc0"/>
+      <rect id="garage-rear-wall" x="41.625" y="661.5" width="96.61369" height="60.625" stroke="#ff40ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="door-kitchen" x="222.125" y="319.5" width="19.5" height="6" fill="white"/>
+      <rect id="door-kitchen-wall" x="222.125" y="319.5" width="19.5" height="6" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="door-solarium" x="307.6875" y="395.5" width="4.5" height="43.875" fill="white"/>
+      <rect id="door-solarium-wall" x="307.6875" y="395.5" width="4.5" height="43.875" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="door-front" x="375.75" y="119.8125" width="18" height="4.5" fill="white"/>
+      <rect id="door-front-wall" x="375.75" y="119.8125" width="18" height="4.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect id="door-garage" x="177.75" y="540" width="19.5" height="6" fill="white"/>
+      <rect id="door-garage-wall" x="177.75" y="540" width="19.5" height="6" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    </g>
+  </g>
+</svg>
