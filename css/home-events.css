@@ -8,6 +8,7 @@
 	font-weight: normal;
 	font-style: normal;
 }
+
 rect.room-active {
     stroke: none;
     fill: #FFD700;
@@ -78,6 +79,9 @@ pre.content {
     top: 3.2rem;
     left: 50rem;
 }
+
+/*region Custom Orange Button*/
+/* Following button style from https://tympanus.net/Development/CreativeButtons/ */
 /* default 15 */
 *, *:after, *:before {
     -webkit-box-sizing: border-box;
@@ -155,6 +159,7 @@ pre.content {
     -moz-transition: all 0.3s;
     transition: all 0.3s;
 }
+/*endregion*/
 
 
 /* Text related styles like fonts */
