@@ -176,9 +176,13 @@ h2.title {
     fill:#C71585;
 }
 
+@keyframes sonos-arcs {
+    0%          {stroke: #DAA520;}
+    20%         {stroke: #FFA500;}
+    40%, 100%   {stroke: #FF8C00;}
+}
 .sonos-arc-active {
-    stroke: #8A2BE2;
-    stroke-width: 1;
+    animation:  sonos-arcs 2.5s ease infinite;
 }
 
 .sonos-inactive {
@@ -189,4 +193,29 @@ h2.title {
 .sonos-arc-inactive {
     stroke: #F0FFFF;
     stroke-width: 1;
+}
+
+.sonos-arc-1 { animation-delay: 0.3s }
+.sonos-arc-2 { animation-delay: 0.3s }
+.sonos-arc-3 { animation-delay: 0.6s }
+.sonos-arc-4 { animation-delay: 0.6s }
+.sonos-arc-5 { animation-delay: 0.9s }
+.sonos-arc-6 { animation-delay: 0.9s }
+
+.lights-inactive {
+    stroke:  grey;
+    fill: lightgrey;
+}
+
+.lights-active {
+    stroke:  yellow;
+    fill:  yellow;
+}
+
+.lights-arc-inactive {
+    stroke:  grey;
+}
+
+.lights-arc-active {
+    stroke:  yellow;
 }

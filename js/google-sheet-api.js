@@ -24,6 +24,7 @@ var signoutButton = document.getElementById('signout-button');
 function handleClientLoad() {
     gapi.load('client:auth2', initClient);
     initSonos();
+    initLights();
 }
 
 /**
@@ -55,7 +56,7 @@ function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
       authorizeButton.style.display = 'none';
       signoutButton.style.display = 'block';
-      populateRecentEvents(105);
+      populateRecentEvents(15);
     } else {
       authorizeButton.style.display = 'block';
       signoutButton.style.display = 'none';
@@ -116,7 +117,58 @@ function populateRecentEvents(minCount) {
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(function (resolve) {
+        return setTimeout(resolve, ms);
+    });
+}
+
+/**
+ * Grab the events between the start and end dates.
+ * The range is inclusve on the chance that the
+ * dates fall on events.
+ * @startDate The begninning of the event range
+ * @endDAte The end of the event range
+ */
+function findNextEventByDate(startDate, endDate) {
+    gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: '1xn0_Qahjb2CrXrXGYAtQ3fqZCu0Ycee3xYo-AmaGTg0',
+        range: 'Sheet1!A1:D'
+        }).then(async function(response) {
+            var range = response.result;
+            if (range.values.length>0) {
+            appendPre('Time, Sensor, Event');
+            for (i = 0; i < range.values.length; i++) {
+              var row = range.values[i];
+              // Print columns A, B and D
+              appendPre(row[0] + ', ' + row[1] + ', ' + row[3]);
+              await sleep(500);
+              updateActivity(row[0], row[1], row[3]);
+            }
+            } else {
+                appendPre('No data found.');
+            }
+        }, function(response) {
+            appendPre('Error: ' + response.result.error.message);
+    });
+}
+
+/**
+ * Update the lights to be either active or inactive
+ * @sensorMapID is the name of the sensor mapped to the SVG object.
+ * @state maps to a sensorStyle which is the CSS used to show the element's state
+ */
+function updateLights (sensorMapID, state) {
+    var stateMapped = sensorStates[state];
+    var sensorStyle = "lights-" + stateMapped;
+    var lights = document.querySelectorAll("[id*='" + sensorMapID + "']");
+    for (var i = 0; i < lights.length; i++) {
+        var light = lights[i];
+        if (light.id.includes("arc")) {
+            light.setAttribute("class", "lights-arc-" + stateMapped);
+        } else {
+            light.setAttribute("class", "lights-" + stateMapped);
+        }
+    }
 }
 
 /**
@@ -127,21 +179,21 @@ function sleep(ms) {
  * the speakers are playing vs not
  */
 function updateSonos (sensorMapID, sensorStyle) {
-
-    console.log("We have sensor map " + sensorMapID);
     if (sensorStyle.includes("inactive")) {
         for (i = 6; i > 0; i--) {
             var sonos1arc = document.getElementById(sensorMapID + '-arc-' + i);
-            sonos1arc.setAttribute("class", "sonos-arc-" + sensorStyle);
+            sonos1arc.setAttribute("class", "sonos-arc-inactive sonos-arc-" + i);
         }
         var sonos = document.getElementById(sensorMapID);
-        sonos.setAttribute("class", "sonos-" + sensorStyle);
+        sonos.setAttribute("class", "sonos-inactive");
     } else {
+        console.log("We have sensor map " + sensorMapID);
         var sonos = document.getElementById(sensorMapID);
-        sonos.setAttribute("class", "sonos-" + sensorStyle);
+        sonos.setAttribute("class", "sonos-active");
+        console.log("We have sensor map " + sensorMapID);
         for (i = 1; i <= 6; i++) {
             var sonos1arc = document.getElementById(sensorMapID + '-arc-' + i);
-            sonos1arc.setAttribute("class", "sonos-arc-" + sensorStyle);
+            sonos1arc.setAttribute("class", "sonos-arc-active sonos-arc-" + i);
         }
     }
 }
@@ -159,18 +211,29 @@ function updateSonos (sensorMapID, sensorStyle) {
 function updateActivity(datetime, sensorID, state) {
     var sensorMapID = sensorIDs[sensorID];
     var sensorRoom = document.getElementById(sensorMapID);
+    // If the object didn't match by ID, then we have a name that we apply
+    // to the object - useful when we have multiple objects with the same ID.
+    if (sensorRoom == null) {
+        sensorRoom = document.getElementsByName(sensorMapID);
+    }
     var sensorRoomWall = document.getElementById(sensorMapID + '-wall');
+    // console.log("About to update sensorID " + sensorID + " in sensorMapID " + sensorMapID);
     var commonUpdate = true;
     if (sensorRoom != null) {
         var sensorStyle = sensorStates[state];
         // console.log("Loc for " + sensorID + " is " + sensorIDs[sensorID]);
-        if (sensorIDs[sensorID].includes("door")) {
+        if (sensorMapID.includes("door")) {
             sensorStyle = "door-" + sensorStyle;
-        } else if (sensorIDs[sensorID].includes("sonos")) {
+        } else if (sensorMapID.includes("light")) {
+            updateLights(sensorMapID, state);
+            commonUpdate = false;
+        } else if (sensorMapID.includes("sonos")) {
             // Need to figure out why udpateSonos loop is not working
             // Something to do with the asynchronous nature of my code.
-            // if (sensorStyle != null) {
-            //     updateSonos(sensorMapID, sensorStyle);
+            // if (state == "playing") {
+            //     if (sensorStyle != null) {
+            //         updateSonos(sensorMapID, sensorStyle);
+            //     }
             // }
             commonUpdate = false;
         } else {
@@ -181,7 +244,7 @@ function updateActivity(datetime, sensorID, state) {
             sensorRoomWall.setAttribute('class', sensorStyle + '-wall');
         }
     } else {
-        console.log("Room for " + sensorID + " is not in list");
+        console.log("Room for " + sensorID + " is not in list - mapped to " + sensorMapID);
     }
 }
 
@@ -205,6 +268,34 @@ function initSonos() {
 }
 
 /**
+ * Initialize the various light SVG object with the 6 arcs
+ * Followed guidance provided here https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
+ */
+function initLights() {
+    var lightsgaragearc1 = document.getElementById('lights-garage-outside-arc-1');
+    lightsgaragearc1.setAttribute("d", describeArc(170, 724, 7, 135, 225));
+    var lightsgaragearc2 = document.getElementById('lights-garage-outside-arc-2');
+    lightsgaragearc2.setAttribute("d", describeArc(170, 724, 10, 135, 225));
+    var lightsgaragearc3 = document.getElementById('lights-garage-outside-arc-3');
+    lightsgaragearc3.setAttribute("d", describeArc(170, 724, 13, 135, 225));
+    var lightsgaragearc4 = document.getElementById('lights-garage-outside-arc-4');
+    lightsgaragearc4.setAttribute("d", describeArc(213, 704, 7, 45, 135));
+    var lightsgaragearc5 = document.getElementById('lights-garage-outside-arc-5');
+    lightsgaragearc5.setAttribute("d", describeArc(213, 704, 10, 45, 135));
+    var lightsgaragearc6 = document.getElementById('lights-garage-outside-arc-6');
+    lightsgaragearc6.setAttribute("d", describeArc(213, 704, 13, 45, 135));
+
+    var lighthousesouth1arc1 = document.getElementById('lights-house-south1-arc-1');
+    lighthousesouth1arc1.setAttribute("d", describeArc(256, 120, 7, 270, 90));
+    var lighthousesouth1arc2 = document.getElementById('lights-house-south1-arc-2');
+    lighthousesouth1arc2.setAttribute("d", describeArc(256, 120, 10, 270, 90));
+    var lighthousesouth2arc1 = document.getElementById('lights-house-south2-arc-1');
+    lighthousesouth2arc1.setAttribute("d", describeArc(408, 120, 7, 270, 90));
+    var lighthousesouth2arc2 = document.getElementById('lights-house-south2-arc-2');
+    lighthousesouth2arc2.setAttribute("d", describeArc(408, 120, 10, 270, 90));
+}
+
+/**
  * The main function of the site for now; this opens the Google sheet,
  * calculates the row numbers to report on based on the lastEventRecord
  * and the minCount and retrieves the event timestamp, event sensor,
@@ -215,7 +306,7 @@ function initSonos() {
 function listRecentEvents(lastEventRecord, eventCount) {
     clearPre();
     firstEventRecord = lastEventRecord - eventCount + 1;
-    console.log("We have a first record " + firstEventRecord + " and a last record " + lastEventRecord);
+    // console.log("We have a first record " + firstEventRecord + " and a last record " + lastEventRecord);
     gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: '1xn0_Qahjb2CrXrXGYAtQ3fqZCu0Ycee3xYo-AmaGTg0',
       range: 'Sheet1!A' + firstEventRecord + ':D' + lastEventRecord
@@ -227,7 +318,7 @@ function listRecentEvents(lastEventRecord, eventCount) {
           var row = range.values[i];
           // Print columns A, B and D
           appendPre(row[0] + ', ' + row[1] + ', ' + row[3]);
-          await sleep(500);
+          await sleep(1500);
           updateActivity(row[0], row[1], row[3]);
         }
       } else {
