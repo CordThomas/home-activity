@@ -56,7 +56,7 @@ function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
       authorizeButton.style.display = 'none';
       signoutButton.style.display = 'block';
-      populateRecentEvents(15);
+      populateRecentEvents(20);
     } else {
       authorizeButton.style.display = 'block';
       signoutButton.style.display = 'none';
@@ -179,22 +179,12 @@ function updateLights (sensorMapID, state) {
  * the speakers are playing vs not
  */
 function updateSonos (sensorMapID, sensorStyle) {
-    if (sensorStyle.includes("inactive")) {
-        for (i = 6; i > 0; i--) {
-            var sonos1arc = document.getElementById(sensorMapID + '-arc-' + i);
-            sonos1arc.setAttribute("class", "sonos-arc-inactive sonos-arc-" + i);
-        }
-        var sonos = document.getElementById(sensorMapID);
-        sonos.setAttribute("class", "sonos-inactive");
-    } else {
-        console.log("We have sensor map " + sensorMapID);
-        var sonos = document.getElementById(sensorMapID);
-        sonos.setAttribute("class", "sonos-active");
-        console.log("We have sensor map " + sensorMapID);
-        for (i = 1; i <= 6; i++) {
-            var sonos1arc = document.getElementById(sensorMapID + '-arc-' + i);
-            sonos1arc.setAttribute("class", "sonos-arc-active sonos-arc-" + i);
-        }
+    var sonos = document.getElementById(sensorMapID);
+    sonos.setAttribute("class", "sonos-" + sensorStyle);
+    var sonosarcs = document.querySelectorAll("[id*='living-room-sonos-arc']");
+    for (i = 0; i < sonosarcs.length; i++) {
+        var arc = sonosarcs[i];
+        arc.setAttribute("class", "sonos-arc-" + sensorStyle);
     }
 }
 
@@ -231,9 +221,7 @@ function updateActivity(datetime, sensorID, state) {
             // Need to figure out why udpateSonos loop is not working
             // Something to do with the asynchronous nature of my code.
             // if (state == "playing") {
-            //     if (sensorStyle != null) {
-            //         updateSonos(sensorMapID, sensorStyle);
-            //     }
+            updateSonos(sensorMapID, sensorStyle);
             // }
             commonUpdate = false;
         } else {
@@ -318,7 +306,7 @@ function listRecentEvents(lastEventRecord, eventCount) {
           var row = range.values[i];
           // Print columns A, B and D
           appendPre(row[0] + ', ' + row[1] + ', ' + row[3]);
-          await sleep(1500);
+          await sleep(500);
           updateActivity(row[0], row[1], row[3]);
         }
       } else {

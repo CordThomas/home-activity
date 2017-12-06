@@ -36,5 +36,5 @@ sensorStates["off"] = "inactive";
 /* Sonos related states - for some reason, stopped happens before playing
    so, reversing these for now
  */
-sensorStates["stopped"] = "active";
-sensorStates["playing"] = "inactive";
+sensorStates["stopped"] = "inactive";
+sensorStates["playing"] = "active";
