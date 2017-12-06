@@ -30,4 +30,4 @@ between events rather than
 * Being a novice at UX, i stole layout ideas shamelessly from various sites.  Nothing earth shattering there.  
 * I then took the basic script from the Google API JS guide (https://developers.google.com/sheets/api/quickstart/js) to interogate the Google sheet for the most recent events and then changed the styles in the SVG to reflect active and inactive areas in the house.
 
-There's a whole lot more I'd like to do with this, time permitting.  I'm tracking enhancements in <a href="issues">Issues</a> for an initial set of things I'd like to do.
+There's a whole lot more I'd like to do with this, time permitting.  I'm tracking enhancements in <a href="../../issues">Issues</a> for an initial set of things I'd like to do.
