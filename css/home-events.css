@@ -78,6 +78,8 @@ pre.content {
     color: #0000ff;
     font-family: "futura-pt-condensed", "futura-pt", Futura, Verdana, Arial, Helvetica, sans-serif;
     font-size: 0.64rem;
+    height: 52.5rem;
+    overflow: auto;
 }
 .authenticate-google{
     position: absolute;
@@ -181,6 +183,7 @@ h2.title {
     fill:#C71585;
 }
 
+/* region Sonos */
 .sonos-inactive {
     stroke: #F0FFFF;
     fill: #F0FFFF;
@@ -210,6 +213,7 @@ h2.title {
     stroke: #F0FFFF;
     stroke-width: 1;
 }
+/* endregion */
 
 .lights-inactive {
     stroke:  grey;
@@ -217,8 +221,8 @@ h2.title {
 }
 
 .lights-active {
-    stroke:  yellow;
-    fill:  yellow;
+    stroke:  lime;
+    fill:  green;
 }
 
 .lights-arc-inactive {
@@ -226,5 +230,5 @@ h2.title {
 }
 
 .lights-arc-active {
-    stroke:  yellow;
+    stroke:  lime;
 }

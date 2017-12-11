@@ -56,7 +56,7 @@ function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
       authorizeButton.style.display = 'none';
       signoutButton.style.display = 'block';
-      populateRecentEvents(20);
+      populateRecentEvents(100);
     } else {
       authorizeButton.style.display = 'block';
       signoutButton.style.display = 'none';
@@ -77,6 +77,10 @@ function handleSignoutClick(event) {
     gapi.auth2.getAuthInstance().signOut();
 }
 
+function updateScroll(prediv) {
+    prediv.scrollTop = prediv.scrollHeight;
+
+}
 /**
 * Append a pre element to the body containing the given message
 * as its text node. Used to display the results of the API call.
@@ -87,6 +91,7 @@ function appendPre(message) {
     var pre = document.getElementById('content');
     var textContent = document.createTextNode(message + '\n');
     pre.appendChild(textContent);
+    updateScroll(pre);
 }
 
 // Clears the PRE<content> tag of content
@@ -209,7 +214,8 @@ function updateActivity(datetime, sensorID, state) {
     var sensorRoomWall = document.getElementById(sensorMapID + '-wall');
     // console.log("About to update sensorID " + sensorID + " in sensorMapID " + sensorMapID);
     var commonUpdate = true;
-    if (sensorRoom != null) {
+    console.log("Sensor room " + sensorRoom + " from sensorID " + sensorID);
+    if (sensorRoom != null && sensorMapID != null) {
         var sensorStyle = sensorStates[state];
         // console.log("Loc for " + sensorID + " is " + sensorIDs[sensorID]);
         if (sensorMapID.includes("door")) {
@@ -221,7 +227,7 @@ function updateActivity(datetime, sensorID, state) {
             // Need to figure out why udpateSonos loop is not working
             // Something to do with the asynchronous nature of my code.
             // if (state == "playing") {
-            updateSonos(sensorMapID, sensorStyle);
+            //updateSonos(sensorMapID, sensorStyle);
             // }
             commonUpdate = false;
         } else {
@@ -306,8 +312,8 @@ function listRecentEvents(lastEventRecord, eventCount) {
           var row = range.values[i];
           // Print columns A, B and D
           appendPre(row[0] + ', ' + row[1] + ', ' + row[3]);
-          await sleep(500);
           updateActivity(row[0], row[1], row[3]);
+          await sleep(500);
         }
       } else {
         appendPre('No data found.');
