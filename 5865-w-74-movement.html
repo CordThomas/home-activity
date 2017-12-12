@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <title>Home Event Tracking</title>
     <link rel="stylesheet" href="css/home-events.css">
+    <link rel="stylesheet" href="./dist/timeline.min.css">
+    <script src="./dist/jquery-3.2.1.min.js"></script>
+    <script src="./dist/timeline.min.js"></script>
 </head>
 <body>
     <div class="title">
@@ -94,6 +97,13 @@
         </g>
       </g>
     </svg>
+
+    <!-- Timeline Block -->
+    <div id="myTimeline">
+      <ul class="timeline-events">
+          <li data-timeline-node="{ start:'2017-05-26 10:00'}">Event Label</li>
+      </ul>
+    </div>
 
     <script src="js/keys.js" type="text/javascript"></script>
     <script src="js/home-events.js" type="text/javascript"></script>

@@ -26,6 +26,11 @@ rect.room-active-wall {
     stroke-width: 1;
 }
 
+rect.room-selected {
+    stroke: none;
+    fill: #3344ff;
+}
+
 rect.room-inactive {
     stroke: none;
     fill: #FFE488;
@@ -232,3 +237,39 @@ h2.title {
 .lights-arc-active {
     stroke:  lime;
 }
+
+/*region Timeline*/
+.myTimeline {
+    position: absolute;
+    top: 30rem;
+    left: 4rem;
+}
+/*endregion*/
+
+/*region Event Log Table */
+.el-row {
+    display: block;
+    float: left;
+    width: 26rem;
+}
+.el-head {
+    font-weight: bold;
+}
+
+.el-time {
+    float: left;
+    display: inline;
+    width: 7rem;
+}
+.el-sense {
+    float: left;
+    display: inline;
+    width: 10rem;
+}
+.el-event {
+    float: left;
+    display: inline;
+    width: 6rem;
+}
+
+/*endregion*/

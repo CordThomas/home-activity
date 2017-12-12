@@ -56,7 +56,7 @@ function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
       authorizeButton.style.display = 'none';
       signoutButton.style.display = 'block';
-      populateRecentEvents(100);
+      populateRecentEvents(20);
     } else {
       authorizeButton.style.display = 'block';
       signoutButton.style.display = 'none';
@@ -81,16 +81,36 @@ function updateScroll(prediv) {
     prediv.scrollTop = prediv.scrollHeight;
 
 }
+
+function createLogInfoDiv (entryName, classname, entryValue) {
+    var loginfo = document.createElement("span");
+    loginfo.setAttribute("class", classname + "el-" + entryName);
+    var textContent = document.createTextNode(entryValue);
+    loginfo.appendChild(textContent);
+    return loginfo;
+}
 /**
 * Append a pre element to the body containing the given message
 * as its text node. Used to display the results of the API call.
 *
 * @param {string} message Text to be placed in pre element.
 */
-function appendPre(message) {
+function appendPre(eventID, eventdate, eventsensor, eventstate) {
     var pre = document.getElementById('content');
-    var textContent = document.createTextNode(message + '\n');
-    pre.appendChild(textContent);
+    logdiv = document.createElement("div");
+    logdiv.setAttribute("id", "eventlog-" + eventID);
+    logdiv.setAttribute("class", "el-row");
+    classname = "";
+    if (eventID == -1) {
+        classname = "el-head ";
+    }
+
+    //'<div class=\'el-head el-time\'>Time</div><div class=\'el-head el-sense\'>Sensor</div><div  class=\'el-head el-event\'>Event</div>
+
+    logdiv.appendChild(createLogInfoDiv("time", classname, eventdate));
+    logdiv.appendChild(createLogInfoDiv("sense", classname, eventsensor));
+    logdiv.appendChild(createLogInfoDiv("event", classname, eventstate));
+    pre.appendChild(logdiv);
     updateScroll(pre);
 }
 
@@ -214,7 +234,6 @@ function updateActivity(datetime, sensorID, state) {
     var sensorRoomWall = document.getElementById(sensorMapID + '-wall');
     // console.log("About to update sensorID " + sensorID + " in sensorMapID " + sensorMapID);
     var commonUpdate = true;
-    console.log("Sensor room " + sensorRoom + " from sensorID " + sensorID);
     if (sensorRoom != null && sensorMapID != null) {
         var sensorStyle = sensorStates[state];
         // console.log("Loc for " + sensorID + " is " + sensorIDs[sensorID]);
@@ -307,13 +326,14 @@ function listRecentEvents(lastEventRecord, eventCount) {
     }).then(async function(response) {
       var range = response.result;
       if (range.values.length>0) {
-        appendPre('Time, Sensor, Event');
-        for (i = 0; i < range.values.length; i++) {
-          var row = range.values[i];
-          // Print columns A, B and D
-          appendPre(row[0] + ', ' + row[1] + ', ' + row[3]);
-          updateActivity(row[0], row[1], row[3]);
-          await sleep(500);
+          appendPre(-1, 'Time','Sensor','Event');
+          for (i = 0; i < range.values.length; i++) {
+              var row = range.values[i];
+              // Print columns A, B and D
+              appendPre(i, row[0], row[1] , row[3]);
+              addEventToTimeline(i+1, row[0], row[1], row[3]);
+              updateActivity(row[0], row[1], row[3]);
+              await sleep(500);
         }
       } else {
         appendPre('No data found.');
@@ -322,3 +342,67 @@ function listRecentEvents(lastEventRecord, eventCount) {
         appendPre('Error: ' + response.result.error.message);
     });
 }
+
+/**
+ * Return the color for the border given the state
+ * @param state
+ */
+function colorSensorState(state) {
+    if (sensorStates[state] == "inactive") {
+        return "#000000";
+    } else {
+        return "#11ee33";
+    }
+}
+
+/**
+ * Add an event to the timeline.  The sensor ID will define it's role and
+ * its symbol while the state will define its color
+ * @param eventID An integer that uniquely identifies this event; the row ID from the book
+ * @param eventDate The datetime of the event
+ * @param sensorID The name of the sensor that is mapped to the timeline row
+ * @param state Whether the sensor is active vs inactive
+ */
+function addEventToTimeline(eventID, eventDate, sensorID, state) {
+    if (eventID == 1) {
+        $("#myTimeline").timeline('addEvent', [{
+            eventID: eventID,
+            start: eventDate,
+            row: sensorTimeline[sensorID],
+            margin: 14,
+            callback: '$.highlightEvent()',
+            extend: {'eventID': eventID}
+            }], function (self, data) {console.log('First event added succesfully')});
+    } else {
+        $("#myTimeline").timeline('addEvent', [{
+            eventID: eventID,
+            start: eventDate,
+            row: sensorTimeline[sensorID],
+            relation: { before: eventID - 1,
+                        linesize: 1,
+                        linecolor: "#cccccc" },
+            bdColor: colorSensorState(state),
+            margin: 14,
+            callback: '$.highlightEvent()',
+            extend: {'eventID': eventID}
+        }], function (self, data) {console.log('Subsequent event added succesfully')})
+    }
+}
+
+$(function() {
+    $("#myTimeline").timeline({
+        type: 'point',
+        scale: 'days',
+        startDatetime: 'currently',
+        range: 1,
+        rows: 14,
+        rowHeight: 24,
+        minGridSize: 30,
+        rangeAlign: 'center',
+        langsDir: './dist/langs'
+    })
+});
+
+$.highlightEvent = function() {
+    console.info( $('.timeline-node.active').data().eventid);
+};
