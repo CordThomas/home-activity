@@ -1,7 +1,7 @@
 /* Establish some constants */
 
 /* Map the sensor IDs to the SVG IDs */
-var sensorIDs = {};
+var sensorIDs = [];
 sensorIDs["Motion Sensor - Living Room"] = "living-room";
 sensorIDs["Motion Sensor - Bedroom"] = "bedroom-master";
 sensorIDs["Motion Sensor - Hallway"] = "hallway";
@@ -21,7 +21,7 @@ sensorIDs["Front Door Light - East"] = "lights-house-south1";
 sensorIDs["Garage - back lights dimmer"] = "lights-garage-outside";
 
 /* Map the sensor IDs to timeline rows */
-var sensorTimeline = {};
+var sensorTimeline = [];
 sensorTimeline["Door - Front"] = 1;
 sensorTimeline["Motion Sensor - Living Room"] = 2;
 sensorTimeline["Motion Sensor - Kitchen"] = 3;
@@ -37,7 +37,7 @@ sensorTimeline["Door - Reading Room to Solarium"] = 12;
 sensorTimeline["Door - Solarium Sliding Main"] = 13;
 sensorTimeline["Living Room Sonos"] = 14;
 
-var sensorStates = {};
+var sensorStates = [];
 sensorStates["closed"] = "inactive";
 sensorStates["open"] = "active";
 sensorStates["present"] = "active";

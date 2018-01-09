@@ -56,7 +56,7 @@ function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
       authorizeButton.style.display = 'none';
       signoutButton.style.display = 'block';
-      populateRecentEvents(20);
+      populateRecentEvents(10);
     } else {
       authorizeButton.style.display = 'block';
       signoutButton.style.display = 'none';
@@ -236,25 +236,27 @@ function updateActivity(datetime, sensorID, state) {
     var commonUpdate = true;
     if (sensorRoom != null && sensorMapID != null) {
         var sensorStyle = sensorStates[state];
-        // console.log("Loc for " + sensorID + " is " + sensorIDs[sensorID]);
-        if (sensorMapID.includes("door")) {
-            sensorStyle = "door-" + sensorStyle;
-        } else if (sensorMapID.includes("light")) {
-            updateLights(sensorMapID, state);
-            commonUpdate = false;
-        } else if (sensorMapID.includes("sonos")) {
-            // Need to figure out why udpateSonos loop is not working
-            // Something to do with the asynchronous nature of my code.
-            // if (state == "playing") {
-            //updateSonos(sensorMapID, sensorStyle);
-            // }
-            commonUpdate = false;
-        } else {
-            sensorStyle = "room-" + sensorStyle;
-        }
-        if (commonUpdate) {
-            sensorRoom.setAttribute('class', sensorStyle);
-            sensorRoomWall.setAttribute('class', sensorStyle + '-wall');
+        if (typeof sensorStyle != 'undefined') {
+            if (sensorMapID.includes("door")) {
+                sensorStyle = "door-" + sensorStyle;
+            } else if (sensorMapID.includes("light")) {
+                updateLights(sensorMapID, state);
+                commonUpdate = false;
+            } else if (sensorMapID.includes("sonos")) {
+                // Need to figure out why udpateSonos loop is not working
+                // Something to do with the asynchronous nature of my code.
+                // if (state == "playing") {
+                //updateSonos(sensorMapID, sensorStyle);
+                // }
+                // }
+                commonUpdate = false;
+            } else {
+                sensorStyle = "room-" + sensorStyle;
+            }
+            if (commonUpdate) {
+                sensorRoom.setAttribute('class', sensorStyle);
+                sensorRoomWall.setAttribute('class', sensorStyle + '-wall');
+            }
         }
     } else {
         console.log("Room for " + sensorID + " is not in list - mapped to " + sensorMapID);
@@ -399,7 +401,7 @@ $(function() {
         rowHeight: 24,
         minGridSize: 30,
         rangeAlign: 'center',
-        langsDir: './dist/langs'
+        langsDir: './dist/langs/'
     })
 });
 
